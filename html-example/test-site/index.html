@@ -1,0 +1,41 @@
+<!--文档类型-->
+<!DOCTYPE html>
+<html><!--根元素-->
+    <head><!--head表示：不是展现给用户，而是包含例如面向搜索引擎的搜索关键字，页面描述，CSS样式表和字符编码声明等-->
+        <meta charset="utf-8"><!--指定当前文档使用UTF-8字符编码-->
+        <title>基于Netty的API网关设计与实现</title><!--页面标题-->
+        
+
+        <link href="styles/style.css" rel="stylesheet" type="text/css">
+        <!--添加该link过后，当前网页可以下载Open Sans字体，在CSS中可以对HTML元素应用这个字体-->
+        <link href="https://fonts.font.im/css?family=Open+Sans" rel="stylesheet" type="text/css"> 
+
+        <!--站点图标-->
+        <!--link元素经常在文档的head，rel表示样式，href表示文件路径-->
+        <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    </head>
+    <body><!--用户在访问页面时看到的内容，比如文本，图像，视频等-->
+        <h1>基于Netty的API网关设计与实现</h1>
+        <figure>
+            <img src="images/Netty-1.png" alt="Netty-1"><!--alt表示图像的描述内容-->
+            <!-- <figcaption>Netty是一个高性能网络框架</figcaption>figurecaption为图片起一个标题 -->
+        </figure>
+        <p>Netty是一个高性能网络框架</p>
+        <ul>
+            <li>高可用</li>
+            <li>高扩展</li>
+            <li>高性能</li>
+        </ul>
+        <p>
+            本题目要求学生使用Java语言，基于高性能网络应用框架Netty设计合理可用的API网关系统，该API网关应具有反向路由、安全认证、流量控制、请求代理等功能，同时保证该网关开发维护简单。
+        </p>
+        <p>如果想了解更多知识，参考<a href="https://netty.io/">netty官网</a></p>
+        <p>或者跳转到其他网页，进行深入学习<a href="contacts.html#Netty">contacts page</a></p>
+    </body>
+     <!--将JS引入页面以作用于HTML以及CSS等页面上所有内容-->
+     <!--我们将 <script> 放在HTML文件的底部附近的原因是浏览器会按照代码在文件中的顺序加载 HTML。
+         如果先加载的 JavaScript 期望修改其下方的 HTML，那么它可能由于 HTML 尚未被加载而失效。
+         因此，将 JavaScript 代码放在 HTML页面的底部附近通常是最好的策略。-->
+    <button>切换用户</button>
+     <script src="scripts/main.js"></script>
+</html>

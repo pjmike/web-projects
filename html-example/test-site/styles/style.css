@@ -1,0 +1,48 @@
+/**
+ 选择器：选择需要添加样式的元素,比如p元素
+ 声明： 一个单独的规则，比如color: red，用来指定添加样式元素的属性
+ 属性和属性值： 比如color: red
+**/
+html {
+    /* px 表示 “像素（pixels）”: 基础字号为 10 像素 */
+    font-size: 20px; 
+    /* Google fonts 输出的 CSS */
+    font-family: 'Open Sans', sans-serif; 
+    background-color: #F9DDCC;
+}
+body {
+    /**强制页面永远保持600像素宽**/
+    width: 800px;
+    /**
+        margin: 外边距
+        padding: 内边距
+         为 margin 或 padding 等属性设置两个值时，第一个值代表元素的上方和下方（在这个例子中设置为 0），
+         而第二个值代表左边和右边（在这里，auto 是一个特殊的值，意思是水平方向上左右对称）
+    **/
+    margin: 20px auto;
+
+    background-color: #ff9500;
+    /**内边距**/
+    padding: 0 20px 20px 20px;
+    /**黑色实线边框**/
+    border: 5px solid black;
+}
+h1 {
+    margin: 0;
+    /**设置上下边距为20px**/
+    padding: 20px 0;
+    color: #00539f;
+    text-align: center;
+}
+img {
+    display: block;
+    /**使图片居中**/
+    margin: 0 auto;
+}
+p,li {
+    font-size: 16px;
+    /**行高**/
+    line-height: 2;
+    /**字间距**/
+    letter-spacing: 1px;
+}
