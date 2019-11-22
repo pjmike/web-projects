@@ -112,6 +112,7 @@
 
 ### 响应式图片
 
+参考HTML示例： [test-photo](../html-example/test-photo/index.html)
 - 方式一：
 ```html
 <!--自适应图片: 默认是400px的，如果屏幕最大宽度小于或等于480px，用120px那张-->
@@ -129,6 +130,8 @@
 </picture>
 ```
 ## 嵌入iframe
+
+
 ```html
 <iframe width="560" height="315" src="https://www.youtube.com/embed/vSBcrmx4aFw" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 <!--
@@ -146,3 +149,33 @@
 
 > SVG 是用于描述矢量图像的XML语言。 它基本上是像HTML一样的标记，只是你有许多不同的元素来定义要显示在图像中的形状，以及要应用于这些形状的效果
 
+## 表格
+
+表格示例如下：
+```html
+<!--
+  <td>: 表示table data
+  <tr>: 表示table row
+  <th>: 表示标题
+-->
+
+<table>
+  <tr>
+     <td>&nbsp;</td>
+     <th scope="col">Knocky</th>
+     <th scope="col">Flor</th>
+  </tr>
+  <tr>
+    <th scope="row">Breed</th>
+    <td>Jack Russell</td>
+  </tr>
+  <tr>
+    <th scope="row">Age</th>
+    <td>16</td>
+  </tr>
+</table>
+```
+
+### 复杂结构
+
+- 参考HTML: [test-table](../html-example/test-table/index.html)
