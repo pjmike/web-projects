@@ -1,6 +1,7 @@
 # 基础知识
 
 ## 元素
+
 ### 块级元素和内联元素
 > HTML中存在很多元素，每个元素也可以拥有自己的属性，比如`<p class="editor-note"> hello world</p>`
 
@@ -179,3 +180,30 @@
 ### 复杂结构
 
 - 参考HTML: [test-table](../html-example/test-table/index.html)
+
+
+## HTML表单
+
+### 简单示例
+
+```html
+<form action="/my-handling-form-page" method="post"> 
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="user_name">
+  </div>
+  <div>
+    <label for="mail">E-mail:</label>
+    <input type="email" id="mail" name="user_email">
+  </div>
+  <div>
+    <label for="msg">Message:</label>
+    <textarea id="msg" name="user_message"></textarea>
+  </div>
+  ...
+</form>
+```
+- action 属性定义了在提交表单时,应该把所收集的数据送给谁(/那个模块)(URL)去处理。.
+- method 属性定义了发送数据的HTTP方法(它可以是“get”或“post”).
+- `<label>` 元素是HTML表单小部件定义标签的正式方法，`<label>` 标签与 `<input>` 通过他们各自的for 属性和 id 属性正确相关联
+- 如果需要向web服务器发送数据，我们需要为每个数据提供一个名称，也就是每个表单小部件中的**name**属性。
