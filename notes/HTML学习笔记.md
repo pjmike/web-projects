@@ -36,10 +36,27 @@
 - `<nav>`：导航栏。
 - `<main>`：主内容,每一个页面上只能用一次<main>，且直接位于<body>中，最好不要把它嵌套进其他元素，主内容中还可以有各种子内容区段
   - `<article>`： 内容即一篇文章
-  - `<section>`: 
+  - `<section>`: 类似有语义的div,它会改变h1-h6的语义，section的嵌套会使得其中的h1-h6下降一级
+  ```html
+  <section>
+    <h1>HTML 语义 </h1>
+    <p>balah balah balah balah</p>
+    <section>
+        <h1> 弱语义 </h1>
+        <p>balah balah</p>
+    </section>
+    <section>
+        <h1> 结构性元素 </h1>
+        <p>balah balah</p> 
+    </section>
+    ...
+  </section>
+  ```
   - `<div>`：是一个块级无语义元素，应仅用于找不到更好的块级元素时，或者不想增加特定的意义时
 - `<aside>`：侧边栏，经常嵌套在 <main> 中，简介信息
 - `<footer>`：页脚。
+
+> **注意：实际上我们经常使用`<div>`和`<span>`这两个无语义元素，然后搭配CSS进行设置样式元素**
 
 示例如下：
 ```html
