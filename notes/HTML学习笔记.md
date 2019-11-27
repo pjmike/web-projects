@@ -207,3 +207,63 @@
 - method 属性定义了发送数据的HTTP方法(它可以是“get”或“post”).
 - `<label>` 元素是HTML表单小部件定义标签的正式方法，`<label>` 标签与 `<input>` 通过他们各自的for 属性和 id 属性正确相关联
 - 如果需要向web服务器发送数据，我们需要为每个数据提供一个名称，也就是每个表单小部件中的**name**属性。
+
+
+### 原生表单组件
+
+- 参考链接：[原生表单组件](https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Forms/The_native_form_widgets)
+
+
+### 表单数据校验
+
+#### 1. 使用内置的表单数据校验
+
+通过表单元素的校验属性实现的，这些属性可以让你定义一些规则，用于限定用户的输入，比如某个输入框是否必须输入，或者某个输入框的字符串的最小最大长度限制，或者某个输入框必须输入一个数字、邮箱地址等
+
+- input元素中的required属性
+- 使用正则表达式校验：pattern属性
+
+```html
+<form>
+  <label for="choose">Would you prefer a banana or a cherry?</label>
+  <input id="choose" name="i_like" required pattern="banana|cherry">
+  <button>Submit</button>
+</form>
+```
+- 所有文本框 (`<input>` 或 `<textarea>`) 都可以使用minlength 和 maxlength 属性来限制长度
+
+
+#### 2. 使用JS校验表单
+
+html
+
+```html
+<form>
+    <label for="mail">I would like you to provide me an e-mail</label>
+    <input type="email" id="mail" name="mail">
+    <button>Submit</button>
+</form>
+```
+js
+
+```javascript
+var email = document.getElementById("mail");
+
+email.addEventListener("input",function(event) {
+    if (email.validity.typeMismatch) {
+        email.setCustomValidity("I expect an e-mail, darling!");
+      } else {
+        email.setCustomValidity("");
+      }
+});
+```
+
+表单校验并不需要复杂的 JavaScript，但它需要对用户的仔细考虑。 一定要记住帮助您的用户更正他提供的数据。 为此，请务必：
+
+- 显示明确的错误消息。
+- 放宽输入格式限制。
+- 指出错误发生的位置（特别是在大型表单中）。
+
+
+参考链接：https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Forms/Data_form_validation
+

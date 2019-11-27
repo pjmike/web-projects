@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>my form page</title>
+</head>
+
+<body>
+    <p>
+        参考资料：<a href="https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Forms/The_native_form_widgets">原生表单部件</a>
+    </p>
+    <form>
+        <p>
+            <label for="simple">a simple select</label>
+            <select name="simple" id="simple">
+                <option>D</option>
+                <option>A</option>
+                <option>B</option>
+                <option>C</option>
+            </select>
+        </p>
+        <p>
+            <label for="groups">a simple groups</label>
+            <select name="groups" id="groups">
+                <!--option元素也可以嵌套在optgroup元素中，以创建视觉关联的组值-->
+                <optgroup label="fruits">
+                    <option>A</option>
+                    <!--selected属性在所需的option元素上设置选择框的默认值-->
+                    <option selected>B</option>
+                    <option>C</option>
+                </optgroup>
+                <optgroup label="vegetables">
+                    <option>A1</option>
+                    <option>B2</option>
+                    <option>C2</option>
+                </optgroup>
+            </select>
+        </p>
+        <p>
+            <label for="multiple">multiple select</label>
+            <!--默认情况下，选择框只允许用户选择一个值。通过将multiple属性添加到<select>元素，您可以允许用户通过操作系统提供的默认机制来选择几个值-->
+            <select multiple name="multi" id="multiple">
+                <option>Banana</option>
+                <option>Cherry</option>
+                <option>Lemon</option>
+            </select>
+        </p>
+        <p>
+            <label for="myFurit">your furits</label>
+            <input type="text" name="myFruit" id="myFruit" list="mySuggestion">
+            <!--使用<datalist>元素来为表单小部件提供建议的、自动完成的值，并使用一些<option>子元素来指定要显示的值-->
+            <datalist id="mySuggestion">
+                <option>Apple</option>
+                <option>Banana</option>
+                <option>Blackberry</option>
+                <option>Blueberry</option>
+                <option>Lemon</option>
+                <option>Lychee</option>
+                <option>Peach</option>
+                <option>Pear</option>
+            </datalist>
+        </p>
+        <p>
+            <button type="submit">
+                This a sumbit button
+            </button>
+            <!--使用button或者input元素来创建按钮-->
+            <input type="submit" value="This is a submit button">
+        </p>
+        <p>
+            <label for="beans">How many beans can you eat?</label>
+            <input type="range" name="beans" id="beans" min="0" max="500" step="10">
+            <span class="beancount"></span>
+        </p>
+    </form>
+</body>
+
+</html>
