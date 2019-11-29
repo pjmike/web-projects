@@ -128,6 +128,17 @@
   </body>
 ```
 
+### 插入图片——HTML5新元素figure
+```html
+<figure>
+  <img src="">
+  <br/>
+  <figcaption>hello world</figcaption>
+</figure>
+```
+- 引入figure元素用来包含图像以及对图像的说明，并且这两项是相关联的
+- 只要图像的说明是相同的，可以在`<figure>`元素中添加多个图像
+
 ### 响应式图片
 
 参考HTML示例： [test-photo](../html-example/test-photo/index.html)
@@ -200,6 +211,19 @@
 
 
 ## HTML表单
+
+### 表单基本概念
+- 表单控件位于`<form>`元素中
+- `<input>`元素用来创建多种不同的表单控件，其type特性的值决定了它将要创建哪种控件，比如type="text"，表示创建一个单行文本框
+  - text: 单行文本框
+  - password: 密码框
+  - radio: 单选按钮
+  - checkbox: 复选框
+  - file: 文件上传域
+  - submit： 提交按钮
+- name特性，该值对表单控件进行标识并与输入的信息一同传送到服务器
+- `<select>`: 下拉列表框
+
 
 ### 简单示例
 
@@ -283,4 +307,9 @@ email.addEventListener("input",function(event) {
 
 
 参考链接：https://developer.mozilla.org/zh-CN/docs/Learn/HTML/Forms/Data_form_validation
+
+
+### 使用JS发送表单——Ajax
+
+AJAX是异步的JavaScript和XML（Asynchronous JavaScript And XML），AJAX 技术主要依靠 XMLHttpRequest (XHR) DOM 对象。它可以构造 HTTP 请求、发送它们，并获取请求结果。
 
