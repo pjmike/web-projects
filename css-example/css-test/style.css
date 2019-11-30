@@ -1,0 +1,45 @@
+/**相邻兄弟组合器，两个选择器之间添加一个+号**/
+h1 + p {
+    font-size: 200%;
+}
+
+h1 {
+    color: red;
+}
+p {
+    color: black;
+}
+/*对类添加样式*/
+.special {
+    color: red;
+    font-weight: bold;
+}
+/*称为后代组合器的选择器，该选择器将选择<li>内部的任何<em>元素（<li>的后代）*/
+li em {
+    color: rebeccapurple;
+}
+
+/*根据状态确定样式**/
+a:link {
+    /*没有被访问的链接颜色变为粉色*/
+    color: pink;
+}
+a:visited {
+    /*访问过的链接变为绿色*/
+    color: green;
+}
+a:hover {
+    /*改变链接被鼠标悬停的时候的样式，例如移除下划线*/
+    text-decoration: none;
+}
+/**
+以下元素建立样式：在<body>之内，紧接在<h1>后面的<p>元素的内部，类名为special。
+**/
+body h1 + p .special {
+    color: yellow;
+    background-color: black;
+    padding: 5px;
+}
+
+
+
