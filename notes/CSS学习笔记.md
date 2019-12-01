@@ -93,8 +93,9 @@ P
    └─ "Sheets"
 ```
 
+## CSS特性
 
-## 层叠与继承
+### 层叠与继承
 层叠
 - Stylesheets cascade(样式表层叠)： css规则的顺序很重要；当应用两条同级别的规则到一个元素的时候，**写在后面的就是实际使用的规则**。
 
@@ -136,7 +137,7 @@ span {
 一般情况下是：优先级 > 资源顺序
 
 
-## 选择器
+### 选择器
 
 - 元素选择器
 ```css
@@ -199,20 +200,19 @@ article p:first-child::first-line {
 }  
 ```
 
-## 盒模型
-
+### 盒模型
 完整的 CSS 盒模型应用于块级盒子，内联盒子只使用盒模型中定义的部分内容。模型定义了盒的每个部分 —— margin, border, padding, and content —— 合在一起就可以创建我们在页面上看到的内容
 
 CSS中组成一个块级盒子需要:
 
 - **Content box**: 这个区域是用来显示内容，大小可以通过设置 width 和 height.
-- **Padding box**: 包围在内容区域外部的空白区域； 大小通过 padding 相关属性设置。
+- **Padding box**: 包围在内容区域外部  的空白区域； 大小通过 padding 相关属性设置。
 - **Border box**: 边框盒包裹内容和内边距。大小通过 border 相关属性设置。
 - **Margin box**: 这是最外面的区域，是盒子和其他元素之间的空白区域。大小通过 margin 相关属性设置
 
 ![box-model](./images/box-model.png)
 
-在标准模型中，如果你给盒设置 width 和 height，实际设置的是 content box。 padding 和 border 再加上设置的宽高一起决定整个盒子的大小
+在标准模型中，如果你给盒设置 width 和 height，实际设置的是 **content box**。 padding 和 border 再加上设置的宽高一起决定整个盒子的大小
 ```css
 .box {
   width: 350px;
@@ -222,3 +222,62 @@ CSS中组成一个块级盒子需要:
   border: 5px solid black;
 }
 ```
+
+### CSS的背景样式
+
+#### 背景
+```
+.b {
+  background-image: url(star.png);
+  background-color: black;
+  background-repeat: repeat-x;
+}
+<div class="wrapper">
+  <div class="box a"></div>
+  <div class="box b"></div>
+</div>
+```
+- background-position属性允许您选择背景图像显示在其应用到的盒子中的位置。它使用的坐标系中，框的左上角是(0,0)，框沿着水平(x)和垂直(y)轴定位
+- 可以使用 background-size属性，它可以设置长度或百分比值，来调整图像的大小以适应背景
+
+#### 边框
+```css
+.box { 
+  border: 1px solid black; 
+} 
+```
+- 使用border为一个框的所有四个边设置边框
+
+### Overflowing content (内容溢出)
+```css
+.box {
+  border: 1px solid #333333;
+  width: 200px;
+  height: 100px;
+  /*隐藏超出边框的内容*/
+  overflow: hidden;
+  /*做成滚动条*/
+  /*overflow: scroll*/
+}
+```
+```html
+<div class="box">This box has a height and a width. This means that if there is too much content to be displayed within the assigned height, there will be an overflow situation. If overflow is set to hidden then any overflow will not be visible.</div>
+
+<p>This content is outside of the box.</p>
+```
+
+### 值和单位
+
+#### 相对长度单位
+
+- em: 父元素的字体大小——带有ems类的<ul>内的<li>元素从它们的父元素中获取大小。因此，每一个连续的嵌套级别都会逐渐变大，因为每个嵌套的字体大小都被设置为1.3em—是其父嵌套字体大小的1.3倍
+- rem: 根元素的字体大小——<ul>内的<li>元素和一个rems类从根元素(<html>)中获取它们的大小。这意味着每一个连续的嵌套层都不会不断变大。
+
+#### 百分比
+百分比的问题在于，它们总是相对于其他值设置的。例如，如果将元素的字体大小设置为百分比，那么它将是元素父元素字体大小的百分比。如果使用百分比作为宽度值，那么它将是父值宽度的百分比
+
+
+#### rgb()与rgba()
+
+- rgb() ——RGB值是一个函数—RGB()—它有三个参数，表示颜色的红色、绿色和蓝色通道值，与十六进制值的方法非常相似。RGB的不同之处在于，每个通道不是由两个十六进制数字表示的，而是由一个介于0到255之间的十进制数字表示的
+- rgba() ——使用RGBA颜色——它们的工作方式与RGB颜色完全相同，因此您可以使用任何RGB值，但是有第四个值表示颜色的alpha通道，它控制不透明度。如果将这个值设置为0，它将使颜色完全透明，而设置为1将使颜色完全不透明
