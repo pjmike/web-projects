@@ -281,3 +281,88 @@ CSS中组成一个块级盒子需要:
 
 - rgb() ——RGB值是一个函数—RGB()—它有三个参数，表示颜色的红色、绿色和蓝色通道值，与十六进制值的方法非常相似。RGB的不同之处在于，每个通道不是由两个十六进制数字表示的，而是由一个介于0到255之间的十进制数字表示的
 - rgba() ——使用RGBA颜色——它们的工作方式与RGB颜色完全相同，因此您可以使用任何RGB值，但是有第四个值表示颜色的alpha通道，它控制不透明度。如果将这个值设置为0，它将使颜色完全透明，而设置为1将使颜色完全不透明
+
+
+### 字体栈
+```css
+p {
+  font-family: "Trebuchet MS", Verdana, sans-serif;
+}
+```
+在这种情况下，浏览器从列表的第一个开始，然后查看在当前机器中，这个字体是否可用。如果可用，就把这个字体应用到选中的元素中。如果不可用，它就移到列表中的下一个字体，然后再检查
+
+### 文本对齐
+ text-align 属性用来控制文本如何和它所在的内容盒子对齐，比如text-align: center
+
+
+ ## CSS布局
+
+ ### display属性
+
+ 在css中实现页面布局的主要方法是设定display属性的值。此属性允许我们更改默认的显示方式。
+
+ 正常流中的所有内容都有一个display的值，用作元素的默认行为方式：
+ - display:block——显示在段落下面
+ - display:inline——与文本的其余内容保持内联，并且不会打断到该行，比如`<a>`元素就是默认该值
+
+
+ ### Flex布局
+
+参考资料：ruanyifeng.com/blog/2015/07/flex-grammar.html
+
+ #### 1. 基本概念
+ > 利用了display:flex
+
+ 采用 Flex 布局的元素，称为 Flex 容器（flex container），简称"容器"。它的所有子元素自动成为容器成员，称为 Flex 项目（flex item），简称"项目"。
+
+ ![flex](./images/flex.png)
+
+ 容器默认存在两根轴:
+ - 水平的主轴
+ - 垂直的交叉轴
+
+ 项目默认沿主轴排列。单个项目占据的主轴空间叫做main size，占据的交叉轴空间叫做cross size
+ ```css
+ .box {
+   display:flex
+ }
+ ```
+ 
+ #### 2. 容器的属性
+
+ - flex-direction属性: 决定主轴的方向
+
+ ```css
+ .box {
+  flex-direction: row | row-reverse | column | column-reverse;
+}
+ ```
+ - flex-wrap属性: 默认情况下，项目都排在一条线（又称"轴线"）上。flex-wrap属性定义，如果一条轴线排不下，如何换行
+   - nowarp: 默认不换行
+   - wrap: 换行，第一行在上方
+   - wrap-reverse：换行，第一行在下方。
+- **flex-flow**: flex-flow属性是flex-direction属性和flex-wrap属性的简写形式，默认值为row nowrap
+- justify-content属性: justify-content属性定义了项目在主轴上的对齐方式。
+```css
+.box {
+  justify-content: flex-start | flex-end | center | space-between | space-around;
+}
+```
+- align-items属性: 定义项目在交叉轴上如何对齐。
+- align-content属性: align-content属性定义了多根轴线的对齐方式。如果项目只有一根轴线，该属性不起作用
+
+
+#### 3. 项目的属性
+
+- order属性定义项目的排列顺序。数值越小，排列越靠前，默认为0。
+- flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。
+- flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
+- flex-basis属性定义了在分配多余空间之前，项目占据的主轴空间（main size）。浏览器根据这个属性，计算主轴是否有多余空间。它的默认值为auto，即项目的本来大小
+- **flex属性**是flex-grow, flex-shrink 和 flex-basis的简写，默认值为0 1 auto。后两个属性可选。
+- align-self属性允许单个项目有与其他项目不一样的对齐方式，可覆盖align-items属性。默认值为auto，表示继承父元素的align-items属性，如果没有父元素，则等同于stretch
+
+
+
+
+
+
