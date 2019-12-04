@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+    <title>JS TEST</title>
+</head>
+
+<body>
+    <label for="weather">Selecr the weather type today:</label>
+    <select id="weather">
+        <option value="">--Make a choice</option>
+        <option value="sunny">Sunny</option>
+        <option value="rainy">Rainy</option>
+        <option value="snowing">snowing</option>
+    </select>
+    <p></p>
+    <script>
+        let select = document.querySelector("select");
+        let para = document.querySelector("p");
+        select.addEventListener("change",function () {
+            let choice = select.value;
+            if (choice === "sunny") {
+                para.textContent = "hello world";
+            } else if( choice === "rainy") {
+                para.textContent = "hello";
+            } else if (choice === "snowing") {
+                para.textContent = "hi";
+            } else {
+                para.textContent = "";
+            }
+        })
+    </script>
+</body>
+
+</html>
