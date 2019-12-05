@@ -1,10 +1,15 @@
 JavaScript 是轻量级解释型语言。浏览器接受到JavaScript代码，并以代码自身的文本格式运行它。从技术角度上看，几乎所有现代的JavaScript转换器都运用一种叫做即时编译（just-in-time compiling）的技术来改善它的表现
 
 
-## JS入门
+# 学习资料
+
+- 阮一峰的JavaScript入门教程：[JavaScript教程](https://wangdoc.com/javascript/index.html)
 
 
-### 脚本调用策略
+# JS入门
+
+
+## 脚本调用策略
 
 脚本调用策略小结：
 
@@ -12,17 +17,17 @@ JavaScript 是轻量级解释型语言。浏览器接受到JavaScript代码，�
 - 如果脚本需要等待解析，且依赖于其它脚本，调用这些脚本时应使用 defer，将关联的脚本按所需顺序置于 HTML 中。
 
 
-### 变量
+## 变量
 
 - 存放数值的容器 （仅仅是用于存储数值的容器，不是数值本身）
 - 变量能够存储任何的东西——不只是字符串和数字，变量可以存储更复杂的数据，甚至是函数
 - 声明一个变量，可以使用let或var，推荐使用let (var存在于旧的JS代码，有些遗留问题)
 
-#### 变量类型
+### 变量类型
 - Number 对象将把传递给它的任何东西转换成一个数字
 - 每个数字都有一个名为 toString() 的方法，它将把它转换成等价的字符串
 
-#### 动态类型
+### 动态类型
 JS是一种动态类型语言，你不需要指定变量将包含什么数据类型（例如number或string)
 
 ```javascript
@@ -33,7 +38,7 @@ typeof myName //number
 ```
 
 
-### 函数
+## 函数
 
 匿名函数：
 ```javascript
@@ -44,7 +49,7 @@ myButton.onclick = function() {
 }
 ```
 
-### 事件
+## 事件
 ```javascript
 var btn = document.querySelector('button');
 
@@ -72,7 +77,7 @@ myElement.addEventListener('click', functionA);
 myElement.addEventListener('click', functionB);
 ```
 
-#### **事件对象**：
+### **事件对象**：
 
 - 有时候在事件处理函数内部，您可能会看到一个固定指定名称的参数，例如event，evt或简单的e。 这被称为事件对象，它被自动传递给事件处理函数，以提供额外的功能和信息
 ```js
@@ -87,7 +92,7 @@ btn.addEventListener('click', bgChange);
 - 在函数中设置背景颜色样式在e.target上-它指的是按钮本身
 - 事件对象 e 的target属性始终是事件刚刚发生的元素的引用
 
-### 对象
+## 对象
 ```javascript
 var person = {
   name : ['Bob', 'Smith'],
@@ -107,13 +112,13 @@ var person = {
 - 对象也可以创建新的成员
 - 括号表示法： person['age']
 
-### 原型
+## 原型
 
 参考资料：
 - https://mp.weixin.qq.com/s/JzgalzgnhVjg0119xEf4BQ
 - https://javascript.ruanyifeng.com/oop/prototype.html
 
-#### 原型的基本概念
+### 原型的基本概念
 
 
 
@@ -149,7 +154,7 @@ cat2.color // 'white
 总结：
 - 原型对象的作用，就是定义所有实例对象共享的属性和方法，而实例对象可以视作从原型对象衍生出来的子对象
 
-#### 原型链
+### 原型链
 
 JavaScript 规定，所有对象都有自己的原型对象（prototype）。一方面，任何一个对象，都可以充当其他对象的原型；另一方面，由于原型对象也是对象，所以它也有自己的原型。因此，就会形成一个“原型链”（prototype chain）：对象到原型，再到原型的原型……
 
@@ -166,7 +171,7 @@ Object.getPrototypeOf(Object.prototype)
 - Object.getPrototypeOf方法返回参数对象的原型
 
 
-**原型链的向上搜索**
+#### **原型链的向上搜索**
 - 读取对象的某个属性时，JavaScript 引擎先寻找对象本身的属性，如果找不到，就到它的原型去找，如果还是找不到，就到原型的原型去找。如果直到最顶层的Object.prototype还是找不到，则返回undefined。如果对象自身和它的原型，都定义了一个同名属性，那么优先读取对象自身的属性，这叫做“覆盖”（overriding）
 
 
@@ -239,6 +244,117 @@ typeof obj // "object"
 Object.create(null) instanceof Object // false
 ```
 
+- instanceof运算符只能用于对象，不适用原始类型的值
+```javascript
+var s = 'hello';
+s instanceof String // false
+```
 
+### 构造函数的继承
+
+让一个构造函数继承另一个构造函数，是非常常见的需求。这可以分成两步实现。第一步是在子类的构造函数中，调用父类的构造函数。
+```
+function Sub(value) {
+  Super.call(this);
+  this.prop = value;
+}
+```
+第二步，是让子类的原型指向父类的原型，这样子类就可以继承父类原型
+```
+Sub.prototype = Object.create(Super.prototype);
+Sub.prototype.constructor = Sub;
+Sub.prototype.method = '...';
+```
+
+举例说明，下面是一个Shape构造函数：
+```javascript
+function Shape() {
+  this.x = 0;
+  this.y = 0;
+}
+
+Shape.prototype.move = function (x, y) {
+  this.x += x;
+  this.y += y;
+  console.info('Shape moved.');
+};
+```
+我们需要让Rectangle构造函数继承Shape
+```javascript
+// 第一步，子类继承父类的实例
+function Rectangle() {
+  Shape.call(this); // 调用父类构造函数
+}
+// 另一种写法
+function Rectangle() {
+  this.base = Shape;
+  this.base();
+}
+
+// 第二步，子类继承父类的原型
+Rectangle.prototype = Object.create(Shape.prototype);
+Rectangle.prototype.constructor = Rectangle;
+```
+
+### 模块
+
+模块是实现特定功能的一组属性和方法的封装。
+
+简单的做法是把模块写成一个对象，所有的模块成员都放到这个对象里面。
+```javascript
+var module1 = new Object({
+　_count : 0,
+　m1 : function (){
+　　//...
+　},
+　m2 : function (){
+  　//...
+　}
+});
+```
+
+#### **1. 封装私有变量：构造函数的写法**
+
+```javascript
+function StringBuilder() {
+  this._buffer = [];
+}
+
+StringBuilder.prototype = {
+  constructor: StringBuilder,
+  add: function (str) {
+    this._buffer.push(str);
+  },
+  toString: function () {
+    return this._buffer.join('');
+  }
+};
+```
+
+## Object的相关方法
+
+### Object.create()
+
+生成实例对象的常用方法是，使用new命令让构造函数返回一个实例。但是很多时候，只能拿到一个实例对象，它可能根本不是由构建函数生成的，那么能不能从一个实例对象，生成另一个实例对象呢？
+
+
+JavaScript 提供了Object.create方法，用来满足这种需求。该方法接受一个对象作为参数，然后以它为原型，返回一个实例对象。该实例完全继承原型对象的属性。
+
+```javascript
+// 原型对象
+var A = {
+  print: function () {
+    console.log('hello');
+  }
+};
+
+// 实例对象
+var B = Object.create(A);
+
+Object.getPrototypeOf(B) === A // true
+B.print() // hello
+B.print === A.print // true
+```
+- Object.create方法以A对象为原型，生成了B对象，B继承了A的所有属性和方法
 
 
