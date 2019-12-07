@@ -358,3 +358,382 @@ B.print === A.print // true
 - Object.create方法以A对象为原型，生成了B对象，B继承了A的所有属性和方法
 
 
+
+## JS异步
+
+
+### 单线程模型
+
+单线程模型指的是，JavaScript 只在一个线程上运行。也就是说，JavaScript 同时只能执行一个任务，其他任务都必须在后面排队等待
+
+缺点：
+- 只要有一个任务耗时很长，后面的任务都必须排队等着，会拖延整个程序的执行。常见的浏览器无响应（假死），往往就是因为某一段 JavaScript 代码长时间运行（比如死循环）
+
+- JavaScript 语言本身并不慢，慢的是读写外部数据，比如等待 Ajax 请求返回结果。这个时候，如果对方服务器迟迟没有响应，或者网络不通畅，就会导致脚本的长时间停滞
+
+
+### 同步任务和异步任务
+
+- 同步任务：那些没有被引擎挂起，在主线程上排队执行的任务，只有前一个任务执行完毕，才能执行后一个任务
+
+- 异步任务是那些被引擎放在一边，不进入主线程、而进入任务队列的任务。只有引擎认为某个异步任务可以执行了（比如 Ajax 操作从服务器得到了结果），该任务（采用回调函数的形式）才会进入主线程执行。排在异步任务后面的代码，不用等待异步任务结束会马上运行，也就是说，异步任务不具有“堵塞”效应
+
+### 任务队列和事件循环
+
+JS运行时，除了一个正在运行的主线程，引擎还提供一个任务队列（task queue) ，里面是各种需要程序处理的异步任务。
+
+
+主线程会去执行所有的同步任务。等到同步任务全部执行完，就会去看任务队列里面的异步任务。如果满足条件，那么异步任务就重新进入主线程开始执行，这时它就变成同步任务了。等到执行完，下一个异步任务再进入主线程开始执行。一旦任务队列清空，程序就结束执行
+
+
+异步任务的写法通常是回调函数。一旦异步任务重新进入主线程，就会执行对应的回调函数。如果一个异步任务没有回调函数，就不会进入任务队列，也就是说，不会重新进入主线程，因为没有用回调函数指定下一步的操作
+
+引擎在不停地检查，一遍又一遍，只要同步任务执行完了，引擎就会去检查那些挂起来的异步任务，是不是可以进入主线程了。这种循环检查的机制，就叫做事件循环（Event Loop）
+
+### 异步操作的模式
+
+#### 1. 回调函数
+
+```javascript
+function f1(callback) {
+  // ...
+  callback();
+}
+
+function f2() {
+  // ...
+}
+
+f1(f2);
+```
+- f2必须等到f1执行完成，才能执行。
+
+#### 2. 事件监听
+
+```javascript
+f1.on('done', f2); // 为f1绑定一个事件
+
+function f1() {
+  setTimeout(function () {
+    // ...
+    f1.trigger('done'); //触发done事件
+  }, 1000);
+}
+//当f1发生done事件时，就执行f2
+```
+
+
+#### 3. 发布订阅模式
+
+```javascript
+jQuery.subscribe('done', f2); //订阅done信号
+
+function f1() {
+  setTimeout(function () {
+    // ...
+    jQuery.publish('done'); //发布done信号
+  }, 1000);
+}
+```
+
+
+### 异步操作的流程控制
+
+#### 串行执行
+
+```javascript
+var items = [ 1, 2, 3, 4, 5, 6 ];
+var results = [];
+
+function async(arg, callback) {
+  console.log('参数为 ' + arg +' , 1秒后返回结果');
+  setTimeout(function () { callback(arg * 2); }, 1000);
+}
+
+function final(value) {
+  console.log('完成: ', value);
+}
+
+function series(item) {
+  if(item) {
+    async( item, function(result) {
+      results.push(result);
+      return series(items.shift());
+    });
+  } else {
+    return final(results[results.length - 1]);
+  }
+}
+
+series(items.shift());
+```
+- 函数series就是串行函数，它会依次执行异步任务，所有任务都完成后，才会执行final函数。items数组保存每一个异步任务的参数，results数组保存每一个异步任务的运行结果
+
+### Promise对象
+```javascript
+// 传统写法
+step1(function (value1) {
+  step2(value1, function(value2) {
+    step3(value2, function(value3) {
+      step4(value3, function(value4) {
+        // ...
+      });
+    });
+  });
+});
+
+// Promise 的写法
+(new Promise(step1))
+  .then(step2)
+  .then(step3)
+  .then(step4);
+```
+- 传统的写法可能需要把f2作为回调函数传入f1，比如写成f1(f2)，异步操作完成后，在f1内部调用f2。Promise 使得f1和f2变成了链式写法。不仅改善了可读性，而且对于多层嵌套的回调函数尤其方便
+
+
+> 有点类似Java8 中的CompletableFuture
+
+
+## DOM
+
+DOM是JS操作网页的接口，全称为"文档对象模型"。它的作用是将网页转为一个 JavaScript 对象，从而可以用脚本进行各种操作（比如增删内容）
+
+浏览器会根据 DOM 模型，将结构化文档（比如 HTML 和 XML）解析成一系列的节点，再由这些节点组成一个树状结构（DOM Tree）。所有的节点和最终的树状结构，都有规范的对外接口。
+
+
+
+#  浏览器
+
+## script原理
+
+为了解决脚本文件下载阻塞网页渲染的问题，一个方法是对<script>元素加入defer属性。它的作用是延迟脚本的执行，等到 DOM 加载生成后，再执行脚本。
+
+### defer属性
+
+```javascript
+<script src="a.js" defer></script>
+<script src="b.js" defer></script>
+```
+
+### async属性
+解决“阻塞效应”的另一个方法是对<script>元素加入async属性。
+
+```javascript
+<script src="a.js" async></script>
+<script src="b.js" async></script>
+```
+
+async属性的作用是，使用另一个进程下载脚本，下载时不会阻塞渲染。
+
+- 浏览器开始解析 HTML 网页。
+- 解析过程中，发现带有async属性的script标签。
+- 浏览器继续往下解析 HTML 网页，同时并行下载<script>标签中的外部脚本。
+- 脚本下载完成，浏览器暂停解析 HTML 网页，开始执行下载的脚本。
+- 脚本执行完毕，浏览器恢复解析 HTML 网页。
+
+
+## 浏览器的组成
+
+浏览器的核心是两部分：渲染引擎和 JavaScript 解释器（又称 JavaScript 引擎）。
+
+### 渲染引擎
+
+渲染引擎处理网页时，通常分为4个阶段：
+- 解析代码：HTML 代码解析为 DOM，CSS 代码解析为 CSSOM（CSS Object Model）。
+- 对象合成：将 DOM 和 CSSOM 合成一棵渲染树（render tree）。
+- 布局：计算出渲染树的布局（layout）。
+- 绘制：将渲染树绘制到屏幕。
+
+以上四步并非严格按顺序执行，往往第一步还没完成，第二步和第三步就已经开始了。所以，会看到这种情况：网页的 HTML 代码还没下载完，但浏览器已经显示出内容了
+
+###  JS引擎
+
+JavaScript 引擎的主要作用是，读取网页中的 JavaScript 代码，对其处理后运行
+
+JavaScript 是一种解释型语言，也就是说，它不需要编译，由解释器实时运行。这样的好处是运行和修改都比较方便，刷新页面就可以重新解释；缺点是每次运行都要调用解释器，系统开销较大，运行速度慢于编译型语言。
+
+
+## AJAX
+
+AJAX，它是 Asynchronous JavaScript and XML 的缩写，JS的异步通信
+
+
+具体来说，AJAX 包括以下几个步骤。
+
+- 创建 XMLHttpRequest 实例
+- 发出 HTTP 请求
+- 接收服务器传回的数据
+- 更新网页数据
+
+
+AJAX 通过原生的XMLHttpRequest对象发出 HTTP 请求，得到服务器返回的数据后，再进行处理。
+
+
+下面是例子：
+```javascript
+var xhr = new XMLHttpRequest();
+//指定回调函数，监听通信状态（readyState属性）的变化
+//XMLHttpRequest.onreadystatechange属性指向一个监听函数。readystatechange事件发生时（实例的readyState属性变化），就会执行这个属性。
+xhr.onreadystatechange = function() {
+    //通信成功时，状态值为4
+    if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+            console.log(xhr,this.responseText);
+        } else {
+            console.error(xhr.statusText);
+        }
+    }
+}
+
+xhr.onerror = function (e) {
+    console.error(xhr.statusText);
+}
+xhr.open("GET","/endpoint",true); //第三个true表示请求是异步的
+xhr.send(null); //send()的参数为null，表示发送请求的时候，不带有数据体。如果发送的是 POST 请求，这里就需要指定数据体
+```
+
+## 同源限制
+
+### 1. 含义
+
+同源政策，它的含义是指：A网页设置的Cookie，B网页不能打开，除非这个网页"同源"，所谓"同源" 指的是"三个相同"
+
+- 协议相同
+- 域名相同
+- 端口相同
+
+
+举例来说，http://www.example.com/dir/page.html这个网址，协议是http://，域名是www.example.com，端口是80（默认端口可以省略），它的同源情况如下。
+
+- http://www.example.com/dir2/other.html：同源
+- http://example.com/dir/other.html：不同源（域名不同）
+- http://v2.www.example.com/dir/other.html：不同源（域名不同）
+- http://www.example.com:81/dir/other.html：不同源（端口不同）
+- https://www.example.com/dir/page.html：不同源（协议不同）
+
+
+### 2. 目的
+
+同源政策的目的，是为了保证用户信息的安全，防止恶意的网站窃取数据。
+
+
+### 3. 限制范围
+- 无法读取非同源网页的 Cookie、LocalStorage 和 IndexedDB。
+- 无法接触非同源网页的 DOM。
+- 无法向非同源地址发送 AJAX 请求（可以发送，但浏览器会拒绝接受响应）
+
+另外，通过 JavaScript 脚本可以拿到其他窗口的window对象。如果是非同源的网页，目前允许一个窗口可以接触其他网页的window对象的九个属性和四个方法
+
+### 4. Cookie
+
+Cookie是服务器写入浏览器的一小段信息，只有同源的网页才能共享，如果两个网页一级域名相同，只是次级域名不同，浏览器允许通过设置document.domain共享Cookie
+
+举例来说，A 网页的网址是http://w1.example.com/a.html，B 网页的网址是http://w2.example.com/b.html，那么只要设置相同的document.domain，两个网页就可以共享 Cookie。因为浏览器通过document.domain属性来检查是否同源。
+```javascript
+// 两个网页都需要设置
+document.domain = 'example.com';
+```
+注意，A 和 B 两个网页都需要设置document.domain属性，才能达到同源的目的。因为设置document.domain的同时，会把端口重置为null，因此如果只设置一个网页的document.domain，会导致两个网址的端口不同，还是达不到同源的目的
+
+### 5. iFrame和多窗口通信
+
+
+iframe元素可以在当前网页之中，嵌入其他网页。每个iframe元素形成自己的窗口，即有自己的window对象。iframe窗口之中的脚本，可以获得父窗口和子窗口。但是，只有在同源的情况下，父窗口和子窗口才能通信；如果跨域，就无法拿到对方的 DOM。
+
+
+### 6. AJAX
+
+同源政策规定，AJAX请求只能发送给同源的网址，否则就报错。
+
+除了架设服务器代理（浏览器请求同源服务器，再由后者请求外部服务），有三个方法规避这个限制：
+- JSONP
+- WebSocket
+- CORS
+
+
+#### 6.1 JSONP
+JSONP 是服务器与客户端跨源通信的常用方法。最大特点就是简单易用，没有兼容性问题，老式浏览器全部支持，服务端改造非常小。
+
+> 注意：JSONP只支持GET请求，而与他作用类似的CORS支持所有类型HTTP请求，JSONP 的优势在于支持老式浏览器，以及可以向不支持 CORS 的网站请求数据。
+
+- 第一步，网页添加一个<script>元素，向服务器请求一个脚本，这不受同源政策限制，可以跨域请求。
+```javascript
+<script src="http://api.foo.com?callback=bar"></script>
+```
+注意，请求的脚本网址有一个callback参数（?callback=bar），用来告诉服务器，客户端的回调函数名称（bar）。
+
+- 第二步，服务器收到请求后，拼接一个字符串，将 JSON 数据放在函数名里面，作为字符串返回（bar({...})）
+
+- 第三步，客户端会将服务器返回的字符串，作为代码解析，因为浏览器认为，这是<script>标签请求的脚本内容。这时，客户端只要定义了bar()函数，就能在该函数体内，拿到服务器返回的 JSON 数据。
+
+示例：
+```javascript
+function addScriptTag(src) {
+  var script = document.createElement('script');
+  script.setAttribute('type', 'text/javascript');
+  script.src = src;
+  document.body.appendChild(script);
+}
+
+window.onload = function () {
+  addScriptTag('http://example.com/ip?callback=foo');
+}
+
+function foo(data) {
+  console.log('Your public IP address is: ' + data.ip);
+};
+```
+
+- 通过动态添加<script>元素，向服务器example.com发出请求，注意该请求的查询字符串有一个callback参数，用来指定回调函数的名字，这对于JSONP是必须的
+
+服务器收到这个请求以后，会将数据放在回调函数的参数位置返回。
+```javascript
+foo({
+  'ip': '8.8.8.8'
+});
+```
+
+由于<script>元素请求的脚本，直接作为代码运行。这时，只要浏览器定义了foo函数，该函数就会立即调用。作为参数的 JSON 数据被视为 JavaScript 对象，而不是字符串，因此避免了使用JSON.parse的步骤。
+
+
+
+#### 6.2 WebSocket
+
+
+WebSocket 是一种通信协议，使用ws://（非加密）和wss://（加密）作为协议前缀。该协议不实行同源政策，只要服务器支持，就可以通过它进行跨源通信
+
+```javascript
+GET /chat HTTP/1.1
+Host: server.example.com
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==
+Sec-WebSocket-Protocol: chat, superchat
+Sec-WebSocket-Version: 13
+Origin: http://example.com
+```
+
+上面代码中，有一个字段是Origin，表示该请求的请求源（origin），即发自哪个域名。
+
+正是因为有了Origin这个字段，所以 WebSocket 才没有实行同源政策。因为服务器可以根据这个字段，判断是否许可本次通信。如果该域名在白名单内，服务器就会做出如下回应。
+```javascript
+HTTP/1.1 101 Switching Protocols
+Upgrade: websocket
+Connection: Upgrade
+Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
+Sec-WebSocket-Protocol: chat
+```
+
+#### 6.3 CORS通信
+
+CORS，跨域资源共享，它允许浏览器向跨域的服务器，发出XMLHttpRequest请求，从而克服AJAX只能同源使用的限制。
+
+
+CORS 需要浏览器和服务器同时支持。目前，所有浏览器都支持该功能。
+
+整个 CORS 通信过程，都是浏览器自动完成，不需要用户参与。对于开发者来说，**CORS 通信与普通的 AJAX 通信没有差别，代码完全一样**。浏览器一旦发现 AJAX 请求跨域，就会自动添加一些附加的头信息，有时还会多出一次附加的请求，但用户不会有感知。因此，实现 CORS 通信的关键是服务器。**只要服务器实现了 CORS 接口，就可以跨域通信**。
+
+- 参考资料：https://wangdoc.com/javascript/bom/cors.html
+
+
+
