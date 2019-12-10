@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Vue-Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <p>{{ message }}</p>
+    </div>
+    <div id="app-2">
+        <!--v-bind特性被称为指令，指令带有前缀v-，以表示它们是Vue提供的特殊特性-->
+        <span v-bind:title="message">
+                鼠标悬停几秒钟查看此处动态绑定的提示信息！
+        </span>
+    </div>
+    <!--控制切换一个元素是否显示-->
+    <div id="app-3">
+        <p v-if="seen">
+            现在你看到我了
+        </p>
+    </div>
+    <!--v-for 指令可以绑定数组的数据来渲染一个项目列表-->
+    <div id="app-4">
+        <ol>
+            <li v-for="todo in todos">
+                {{todo.text}}
+            </li>
+        </ol>
+    </div>
+    <!--用 v-on 指令添加一个事件监听器-->
+    <div id="app-5">
+        <p>{{ message }}</p>
+        <button v-on:click="reverseMessage">反转消息</button>
+    </div>
+    <script>
+        new Vue({
+            //el: 提供一个在页面上已存在的DOM元素作为Vue实例的挂载目标
+            el: '#app',
+            // Vue实例的数据对象，用于给View提供数据
+            data: {
+                message: 'Hello Vue.js!'
+            }
+        });
+        var app2 = new Vue({
+            el: "#app-2",
+            data: {
+                message: "页面加载于 "+new Date().toLocaleString()
+            }
+        });
+        var app3 = new Vue({
+            el: "#app-3",
+            data: {
+                //在控制台输入 app3.seen = false，你会发现之前显示的消息消失了
+                seen: true
+            }
+        });
+        var app4 = new Vue({
+            el: "#app-4",
+            data: {
+                todos: [
+                    {text: "学习JavaScript"},
+                    {text: "学习JavaScript"},
+                    {text: "学习JavaScript"}
+                ]
+            }
+        });
+        var app5 = new Vue({
+            el: "#app-5",
+            data: {
+                message: "hello world"
+            },
+            methods: {
+                //所有的 DOM 操作都由 Vue 来处理，你编写的代码只需要关注逻辑层面即可
+                reverseMessage: function() {
+                    this.message = this.message.split("").reverse().join("");
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
